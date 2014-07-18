@@ -25,6 +25,7 @@
 
 var Engine = require('./famous/core/Engine');
 var ImageSurface = require('./famous/surfaces/ImageSurface');
+var Integrations = require('./lib/integrations');
 
 var DOMPropertyOperations = require('react/lib/DOMPropertyOperations');
 var ReactBrowserComponentMixin = require('react/lib/ReactBrowserComponentMixin');
@@ -210,24 +211,28 @@ var SurfaceMixin = merge(ReactComponentMixin, {
 
 });
 
-var Image = createComponent('Image', SurfaceMixin, {
-  mountComponent: function() {
-    ReactComponentMixin.mountComponent.apply(this, arguments);
-    this.node = new ImageSurface({});
-    this.applyNodeProps(BLANK_PROPS, this.props);
-    return this.node;
-  },
+var createFamousComponent = function(name) {
+  return createComponent(name, SurfaceMixin, {
+    mountComponent: function() {
+      ReactComponentMixin.mountComponent.apply(this, arguments);
+      this.node = Integrations.getNewClass(name, this.props);
+      console.log(this.node);
+      this.applyNodeProps(BLANK_PROPS, this.props);
+      return this.node;
+    },
 
-  receiveComponent: function(nextComponent, transaction) {
-    var props = nextComponent.props;
-    this.applyNodeProps(this.props, props);
-    this.props = props;
-  }
-});
+    receiveComponent: function(nextComponent, transaction) {
+      var props = nextComponent.props;
+      this.applyNodeProps(this.props, props);
+      this.props = props;
+    }
+  });
+};
 
 var ReactFamous = {
   Context: Context,
-  Image: Image
+  StaticScrollview: createFamousComponent('StaticScrollview')
 };
+
 
 module.exports = ReactFamous;

@@ -4,8 +4,9 @@ var React = require('react');
 var ReactFamous = require('./react-famous');
 
 var Context = ReactFamous.Context;
-var Image = ReactFamous.Image;
+var StaticScrollview = ReactFamous.StaticScrollview;
 
+/**
 var FamousTimerMixin = {
   componentWillMount: function() {
     this._famousTimers = [];
@@ -20,25 +21,21 @@ var FamousTimerMixin = {
   componentWillUnmount: function() {
     this._famousTimers.forEach(Timer.clear.bind(Timer));
   }
-};
+}; **/
+
+var size = [200, 200];
+var direction = 0;
 
 var App = React.createClass({
-  mixins: [FamousTimerMixin],
+  //mixins: [FamousTimerMixin],
 
-  getInitialState: function() {
-    return {famous: true};
-  },
-  componentDidMount: function() {
-    this.setInterval(this.toggle, 1000);
-  },
-  toggle: function() {
-    this.setState({famous: !this.state.famous});
-  },
   render: function() {
-    var imageUrl = this.state.famous ? 'famous_logo.png' : 'react_logo.png';
     return (
       <Context>
-        <Image size={[200, 200]} content={imageUrl} />
+        <StaticScrollview direction={direction}>
+          <div size={size}>Surface 1</div>
+          <div size={size}>Surface 2</div>
+        </StaticScrollview>
       </Context>
     );
   }
